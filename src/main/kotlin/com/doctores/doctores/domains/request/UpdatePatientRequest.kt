@@ -4,5 +4,5 @@ data class UpdatePatientRequest(
     val nombre: String?,
     val apellido: String?,
     val identificacion: String?,
-    val telefono: String?
+    val telefono: Int?
 )

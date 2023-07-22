@@ -105,7 +105,9 @@ class AppointmentService {
                     idDoctor = updateRequest.idDoctor?:doctor.idDoctor,
                     horario = updateRequest.horario?:appointment.horario
                 )
-                appointmentRepository.updateAppointmentById(id,request.idDoctor,request.idPaciente,request.especialidad,request.horario)
+                val updateAt = Instant.now()
+                appointmentRepository.updateAppointmentById(id,request.idDoctor,request.idPaciente,request.especialidad,request.horario,
+                    updateAt)
                 doctor =  doctorRepository.getByDoctorId(appointment.idDoctor)?:doctor
                 return CreateAppointmentResponse(
                     idPaciente = updateRequest.idPaciente?:appointment.identificacionPaciente,

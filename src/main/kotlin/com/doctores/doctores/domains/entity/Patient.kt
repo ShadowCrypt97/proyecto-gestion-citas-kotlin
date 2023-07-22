@@ -9,7 +9,7 @@ open class Patient (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_paciente")
-    open var idDoctor: Long=0,
+    open var idPatient: Long=0,
 
     @Column(name="nombre")
     open var nombre: String,
@@ -21,12 +21,12 @@ open class Patient (
     open var identificacion: String,
 
     @Column(name="telefono")
-    open var telefono: String,
+    open var telefono: Int?,
 
     @Column(name="created_at")
-    open var createdAt: Instant,
+    open var createdAt: Instant?,
 
     @Column(name="updated_at")
-    open var updatedAt: Instant
+    open var updatedAt: Instant?
 
 )

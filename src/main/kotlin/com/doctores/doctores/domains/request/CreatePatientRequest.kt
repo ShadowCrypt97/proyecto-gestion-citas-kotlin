@@ -9,5 +9,5 @@ data class CreatePatientRequest (
     val apellido: String,
     @field:NotNull("Identificacion is required")
     val identificacion: String,
-    val telefono: String?
+    val telefono: Int?
 )
