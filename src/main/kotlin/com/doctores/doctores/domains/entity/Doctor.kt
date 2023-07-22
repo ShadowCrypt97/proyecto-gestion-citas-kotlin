@@ -30,6 +30,9 @@ open class Doctor (
     open var correo: String?="",
 
     @Column(name="created_at")
-    open var createdAt: Instant = Instant.now(),
+    open var createdAt: Instant?,
 
-)
+    @Column(name="updated_at")
+    open var updatedAt: Instant?,
+
+    )

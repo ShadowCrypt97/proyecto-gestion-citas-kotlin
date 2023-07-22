@@ -21,6 +21,8 @@ class DoctorService {
                 especialidad = request.especialidad,
                 correo = request.correo,
                 consultorio = request.consultorio,
+                createdAt = Instant.now(),
+                updatedAt = null
             )
         )
         return CreateDoctorResponse(
@@ -30,7 +32,8 @@ class DoctorService {
             especialidad = request.especialidad,
             correo = request.correo,
             consultorio = request.consultorio,
-            createAt = Instant.now()
+            createAt = Instant.now(),
+            updateAt = doctor.updatedAt
         )
     }
 
@@ -49,7 +52,8 @@ class DoctorService {
                         especialidad = doctor.especialidad,
                         correo = doctor.correo,
                         consultorio = doctor.consultorio,
-                        createAt = doctor.createdAt
+                        createAt = doctor.createdAt,
+                        updateAt = doctor.updatedAt
                     ))
                 }else
                     throw Error("No existen doctores en la lista")
@@ -68,7 +72,8 @@ class DoctorService {
                 especialidad = doctor.especialidad,
                 correo = doctor.correo,
                 consultorio = doctor.consultorio,
-                createAt = doctor.createdAt
+                createAt = doctor.createdAt,
+                updateAt = doctor.updatedAt
             )
         }else{
             throw Error("El usuario no fué encontrado exitosamente")
@@ -85,7 +90,9 @@ class DoctorService {
                 correo = updateRequest.correo?:doctor.correo,
                 consultorio = updateRequest.consultorio?:doctor.consultorio,
             )
-            doctorRepository.updateDoctorById(id,request.nombre,request.apellido,request.especialidad,request.consultorio,request.correo?:"null")
+            val updateAt = Instant.now()
+            doctorRepository.updateDoctorById(id,request.nombre,request.apellido,request.especialidad,request.consultorio,request.correo?:"null",
+                updateAt)
             return CreateDoctorResponse(
                 idDoctor = doctor.idDoctor,
                 nombre = updateRequest.nombre?:doctor.nombre,
@@ -93,7 +100,8 @@ class DoctorService {
                 especialidad = updateRequest.especialidad?:doctor.especialidad,
                 correo = updateRequest.correo?:doctor.correo,
                 consultorio = updateRequest.consultorio?:doctor.consultorio,
-                createAt = Instant.now()
+                updateAt = updateAt,
+                createAt = doctor.createdAt
             )
         }else
             throw Error("El doctor con id ${id} no existe")

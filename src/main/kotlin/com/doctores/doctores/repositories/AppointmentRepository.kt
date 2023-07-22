@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 interface AppointmentRepository: JpaRepository<Appointment, Long> {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
@@ -16,7 +17,7 @@ interface AppointmentRepository: JpaRepository<Appointment, Long> {
     fun getAllAppointments(): MutableList<Appointment>?
     @Modifying
     @Transactional
-    @Query("UPDATE citas SET id_doctor = ?2, identificacion_paciente = ?3, especialidad = ?4, horario = ?5 WHERE id_cita = ?1", nativeQuery = true)
-    fun updateAppointmentById(id:Long, idDoctor: Long, idPaciente: String, especialidad: String, horario: String): Int
+    @Query("UPDATE citas SET id_doctor = ?2, identificacion_paciente = ?3, especialidad = ?4, horario = ?5, updated_at = ?6 WHERE id_cita = ?1", nativeQuery = true)
+    fun updateAppointmentById(id:Long, idDoctor: Long, idPaciente: String, especialidad: String, horario: String, updatedAt: Instant): Int
 
 }
