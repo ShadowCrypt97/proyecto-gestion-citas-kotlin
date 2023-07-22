@@ -5,6 +5,7 @@ import com.doctores.doctores.constants.Doctor
 import com.doctores.doctores.constants.GetDoctorById
 import com.doctores.doctores.constants.UpdateDoctor
 import com.doctores.doctores.domains.request.CreateDoctorRequest
+import com.doctores.doctores.domains.request.UpdateDoctorRequest
 import com.doctores.doctores.domains.responses.CreateDoctorResponse
 import com.doctores.doctores.services.DoctorService
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +24,7 @@ class DoctorController {
     private lateinit var doctorService: DoctorService
 
     @GetMapping(Doctor)
-    fun getAllDoctors(): List<CreateDoctorResponse> =doctorService.getAllDoctors()
+    fun getAllDoctors(): MutableList<CreateDoctorResponse>? =doctorService.getAllDoctors()
     @PostMapping(CreateDoctors)
     fun createDoctor(
         @RequestBody @Validated request: CreateDoctorRequest
@@ -34,6 +35,6 @@ class DoctorController {
     ): CreateDoctorResponse = doctorService.getDoctorById(id)
     @PutMapping(UpdateDoctor)
     fun updateDoctor(
-        @PathVariable("id") id: Long
-    ): CreateDoctorResponse = doctorService.updateDoctor(id)
+        @PathVariable("id") id: Long, @RequestBody @Validated request:UpdateDoctorRequest
+    ): CreateDoctorResponse = doctorService.updateDoctor(id,request)
 }

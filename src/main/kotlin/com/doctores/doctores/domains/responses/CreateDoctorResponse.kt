@@ -8,5 +8,5 @@ data class CreateDoctorResponse(
     val especialidad: String,
     val consultorio: Long,
     val correo: String?,
-    val createAt: Instant
+    val createAt: Instant?
 )

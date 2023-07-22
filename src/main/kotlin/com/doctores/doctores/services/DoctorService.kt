@@ -1,12 +1,13 @@
 package com.doctores.doctores.services
 
+import com.doctores.doctores.domains.entity.Doctor
 import com.doctores.doctores.domains.request.CreateDoctorRequest
+import com.doctores.doctores.domains.request.UpdateDoctorRequest
 import com.doctores.doctores.domains.responses.CreateDoctorResponse
 import com.doctores.doctores.repositories.DoctorRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
-import com.doctores.doctores.domains.entity.Doctor
 
 @Service
 class DoctorService {
@@ -23,7 +24,7 @@ class DoctorService {
             )
         )
         return CreateDoctorResponse(
-            idDoctor = 1,
+            idDoctor = doctor.idDoctor,
             nombre = request.nombre,
             apellido = request.apellido,
             especialidad = request.especialidad,
@@ -33,18 +34,27 @@ class DoctorService {
         )
     }
 
-    fun getAllDoctors(): List<CreateDoctorResponse>{
-        var response : List<CreateDoctorResponse> = listOf(
-            CreateDoctorResponse(
-                idDoctor = 1,
-                nombre = "test",
-                apellido = "test",
-                especialidad = "test",
-                correo = "test",
-                consultorio = 123,
-                createAt = Instant.now()
-            )
-        )
+    fun getAllDoctors(): MutableList<CreateDoctorResponse>? {
+        val doctorsList = doctorRepository.getAllDoctors()
+        var response : MutableList<CreateDoctorResponse>? = mutableListOf()
+        val doctors: ListIterator<Doctor>? = doctorsList?.listIterator(1)
+        if(doctors!=null){
+            while (doctors.hasNext()) {
+                val doctor = doctors.next()
+                if (response != null) {
+                    response.add(CreateDoctorResponse(
+                        idDoctor = doctor.idDoctor,
+                        nombre = doctor.nombre,
+                        apellido = doctor.apellido,
+                        especialidad = doctor.especialidad,
+                        correo = doctor.correo,
+                        consultorio = doctor.consultorio,
+                        createAt = doctor.createdAt
+                    ))
+                }else
+                    throw Error("No existen doctores en la lista")
+            }
+        }
         return response
     }
 
@@ -53,38 +63,39 @@ class DoctorService {
         if (doctor!=null){
             return CreateDoctorResponse(
                 idDoctor = doctor.idDoctor,
-                nombre = "test",
-                apellido = "test",
-                especialidad = "test",
-                correo = "test",
-                consultorio = 123,
-                createAt = Instant.now()
+                nombre = doctor.nombre,
+                apellido = doctor.apellido,
+                especialidad = doctor.especialidad,
+                correo = doctor.correo,
+                consultorio = doctor.consultorio,
+                createAt = doctor.createdAt
             )
         }else{
-            return CreateDoctorResponse(
-                idDoctor = 1,
-                nombre = "test",
-                apellido = "test",
-                especialidad = "test",
-                correo = "test",
-                consultorio = 123,
-                createAt = Instant.now()
-            )
+            throw Error("El usuario no fué encontrado exitosamente")
         }
-
-
-
     }
 
-    fun updateDoctor(id: Long): CreateDoctorResponse{
-        return CreateDoctorResponse(
-            idDoctor = 1,
-            nombre = "test",
-            apellido = "test",
-            especialidad = "test",
-            correo = "test",
-            consultorio = 123,
-            createAt = Instant.now()
-        )
+    fun updateDoctor(id: Long, updateRequest: UpdateDoctorRequest): CreateDoctorResponse{
+        var doctor: Doctor? =  doctorRepository.getByDoctorId(id)
+        if(doctor!=null){
+            val request = CreateDoctorRequest(
+                nombre = updateRequest.nombre?:doctor.nombre,
+                apellido = updateRequest.apellido?:doctor.apellido,
+                especialidad = updateRequest.especialidad?:doctor.especialidad,
+                correo = updateRequest.correo?:doctor.correo,
+                consultorio = updateRequest.consultorio?:doctor.consultorio,
+            )
+            doctorRepository.updateDoctorById(id,request.nombre,request.apellido,request.especialidad,request.consultorio,request.correo?:"null")
+            return CreateDoctorResponse(
+                idDoctor = doctor.idDoctor,
+                nombre = updateRequest.nombre?:doctor.nombre,
+                apellido = updateRequest.apellido?:doctor.apellido,
+                especialidad = updateRequest.especialidad?:doctor.especialidad,
+                correo = updateRequest.correo?:doctor.correo,
+                consultorio = updateRequest.consultorio?:doctor.consultorio,
+                createAt = Instant.now()
+            )
+        }else
+            throw Error("El doctor con id ${id} no existe")
     }
 }

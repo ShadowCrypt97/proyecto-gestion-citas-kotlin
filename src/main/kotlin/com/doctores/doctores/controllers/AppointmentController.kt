@@ -2,6 +2,7 @@ package com.doctores.doctores.controllers
 import com.doctores.doctores.constants.*
 import com.doctores.doctores.domains.request.CreateAppointmentRequest
 import com.doctores.doctores.domains.request.CreateDoctorRequest
+import com.doctores.doctores.domains.request.UpdateAppointmentRequest
 import com.doctores.doctores.domains.responses.CreateAppointmentResponse
 import com.doctores.doctores.domains.responses.HealthCheckResponse
 import com.doctores.doctores.services.AppointmentService
@@ -15,7 +16,7 @@ class AppointmentController {
     @Autowired
     private lateinit var appointmentService: AppointmentService
     @GetMapping(Appointment)
-    fun getAllAppointments(): List<CreateAppointmentResponse> = appointmentService.getAllAppointments()
+    fun getAllAppointments(): MutableList<CreateAppointmentResponse>? = appointmentService.getAllAppointments()
     @PostMapping(CreateAppointments)
     fun createAppointment(
         @RequestBody request: CreateAppointmentRequest
@@ -26,6 +27,6 @@ class AppointmentController {
     ): CreateAppointmentResponse = appointmentService.getAppointmentById(id)
     @PutMapping(UpdateAppointment)
     fun updateAppointment(
-        @PathVariable("id") id: Long
-    ): CreateAppointmentResponse = appointmentService.updateAppointment(id)
+        @PathVariable("id") id: Long, @RequestBody request: UpdateAppointmentRequest
+    ): CreateAppointmentResponse = appointmentService.updateAppointment(id,request)
 }
